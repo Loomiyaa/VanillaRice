@@ -2,9 +2,9 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients":
 	[
-		{ "item": "vanillarice:rice_grain" },
-		{ "item": "minecraft:sugar" },
-		{ "item": "minecraft:milk_bucket" }
+		"vanillarice:rice_grain",
+		"minecraft:sugar",
+		"minecraft:milk_bucket"
 	],
 	"result":
 	{

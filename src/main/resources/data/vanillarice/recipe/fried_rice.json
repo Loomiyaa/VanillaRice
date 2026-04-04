@@ -2,9 +2,9 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients":
 	[
-		{ "item": "vanillarice:rice_grain" },
-		{ "item": "minecraft:carrot" },
-		{ "item": "minecraft:bowl" }
+		"vanillarice:rice_grain",
+		"minecraft:carrot",
+		"minecraft:bowl"
 	],
 	"result":
 	{

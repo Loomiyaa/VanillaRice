@@ -1,9 +1,9 @@
 package net.loomiyaa.vanillarice.util;
 
-import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+//import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
 import net.loomiyaa.vanillarice.item.ModItems;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
+//import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 
 public class RiceTrades {
     public static void registerRiceTrades() {
-
+/*
         // FARMER VILLAGERS LEVEL 1
         TradeOfferHelper.registerVillagerOffers(
                 VillagerProfession.FARMER,
@@ -54,6 +54,6 @@ public class RiceTrades {
                             0.05f
                     )
                 )
-        );
+        );*/
     }
 }

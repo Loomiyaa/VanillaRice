@@ -2,7 +2,7 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients":
 	[
-		{ "item": "vanillarice:rice_bag" }
+		"vanillarice:rice_bag"
 	],
 	"result":
 	{

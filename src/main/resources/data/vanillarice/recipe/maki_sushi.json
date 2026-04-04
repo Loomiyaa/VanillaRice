@@ -2,9 +2,9 @@
 	"type": "minecraft:crafting_shapeless",
 	"ingredients":
 	[
-		{ "item": "vanillarice:rice_grain" },
-		{ "item": "minecraft:dried_kelp" },
-		{ "item": "minecraft:salmon" }
+		"vanillarice:rice_grain",
+		"minecraft:dried_kelp",
+		"minecraft:salmon"
 	],
 	"result":
 	{

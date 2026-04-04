@@ -8,10 +8,7 @@
 	],
 	"key":
 	{
-		"r":
-		{
-			"item": "vanillarice:rice_grain"
-		}
+		"r": "vanillarice:rice_grain"
 	},	
 	"result":
 	{

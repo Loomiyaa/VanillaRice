@@ -1,15 +1,15 @@
 {
-	"item.vanillarice.rice_seeds": "Rice seeds",
+	"item.vanillarice.rice_seeds": "Rice Seeds",
 	"item.vanillarice.rice_grain": "Rice",
 	"item.vanillarice.rice_bowl": "Bowl of Rice",
 	"item.vanillarice.maki_sushi": "Maki Sushi",
 	"item.vanillarice.fried_rice": "Fried Rice",
 	"item.vanillarice.mochi": "Mochi",
-	"item.vanillarice.rice_bag": "Bag of rice",
+	"item.vanillarice.rice_bag": "Bag of Rice",
 
-	"item.vanillarice.rice_crop": "Rice plant",
+	"item.vanillarice.rice_crop": "Rice Plant",
 
 	"itemGroup.vanillarice": "Rice",
 	
-	"langfile_author": "LeLoomi"
+	"langfile_author": "Loomiyaa"
 }

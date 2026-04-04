@@ -1,7 +1,7 @@
-package net.leloomi.vanillarice.block;
+package net.loomiyaa.vanillarice.block;
 
-import net.leloomi.vanillarice.VanillaRice;
-import net.leloomi.vanillarice.block.custom.RiceCropBlock;
+import net.loomiyaa.vanillarice.VanillaRice;
+import net.loomiyaa.vanillarice.block.custom.RiceCropBlock;
 import net.minecraft.block.*;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;

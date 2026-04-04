@@ -1,4 +1,4 @@
-package net.leloomi.vanillarice.item;
+package net.loomiyaa.vanillarice.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

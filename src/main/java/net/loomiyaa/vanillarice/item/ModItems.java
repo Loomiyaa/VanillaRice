@@ -1,7 +1,7 @@
-package net.leloomi.vanillarice.item;
+package net.loomiyaa.vanillarice.item;
 
-import net.leloomi.vanillarice.VanillaRice;
-import net.leloomi.vanillarice.block.ModBlocks;
+import net.loomiyaa.vanillarice.VanillaRice;
+import net.loomiyaa.vanillarice.block.ModBlocks;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;

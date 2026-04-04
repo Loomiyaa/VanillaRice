@@ -1,7 +1,7 @@
-package net.leloomi.vanillarice.util;
+package net.loomiyaa.vanillarice.util;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.leloomi.vanillarice.item.ModItems;
+import net.loomiyaa.vanillarice.item.ModItems;
 import net.minecraft.block.Blocks;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.condition.*;

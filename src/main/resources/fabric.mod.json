@@ -9,8 +9,8 @@
     "LeLoomi"
   ],
   "contact": {
-    "homepage": "https://github.com/LeLoomi",
-    "sources": "https://github.com/LeLoomi/VanillaRice"
+    "homepage": "https://github.com/Loomiyaa",
+    "sources": "https://github.com/Loomiyaa/VanillaRice"
   },
 
   "license": "CC BY-SA 4.0",
@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.leloomi.vanillarice.VanillaRice"
+      "net.loomiyaa.vanillarice.VanillaRice"
     ],
     "client": [
-      "net.leloomi.vanillarice.VanillaRiceClient"
+      "net.loomiyaa.vanillarice.VanillaRiceClient"
     ]
   },
   "mixins": [
@@ -32,7 +32,7 @@
   "depends": {
     "fabricloader": ">=0.14.12",
     "fabric": "*",
-    "minecraft": "~1.21",
+    "minecraft": "~1.21.11",
     "java": ">=17"
   },
   "suggests": {

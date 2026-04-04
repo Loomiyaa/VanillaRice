@@ -1,11 +1,11 @@
-package net.leloomi.vanillarice;
+package net.loomiyaa.vanillarice;
 
 import net.fabricmc.api.ModInitializer;
-import net.leloomi.vanillarice.block.ModBlocks;
-import net.leloomi.vanillarice.item.ModItemGrouper;
-import net.leloomi.vanillarice.item.ModItems;
-import net.leloomi.vanillarice.util.ModLootTableModifiers;
-import net.leloomi.vanillarice.util.RiceTrades;
+import net.loomiyaa.vanillarice.block.ModBlocks;
+import net.loomiyaa.vanillarice.item.ModItemGrouper;
+import net.loomiyaa.vanillarice.item.ModItems;
+import net.loomiyaa.vanillarice.util.ModLootTableModifiers;
+import net.loomiyaa.vanillarice.util.RiceTrades;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

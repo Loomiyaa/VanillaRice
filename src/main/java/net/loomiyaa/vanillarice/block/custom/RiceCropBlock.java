@@ -1,6 +1,6 @@
-package net.leloomi.vanillarice.block.custom;
+package net.loomiyaa.vanillarice.block.custom;
 
-import net.leloomi.vanillarice.item.ModItems;
+import net.loomiyaa.vanillarice.item.ModItems;
 import net.minecraft.block.*;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.fluid.FluidState;

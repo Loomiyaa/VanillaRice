@@ -1,4 +1,4 @@
-package net.leloomi.vanillarice.item;
+package net.loomiyaa.vanillarice.item;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.ItemGroups;

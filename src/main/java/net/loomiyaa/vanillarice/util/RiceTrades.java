@@ -1,7 +1,7 @@
-package net.leloomi.vanillarice.util;
+package net.loomiyaa.vanillarice.util;
 
 import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
-import net.leloomi.vanillarice.item.ModItems;
+import net.loomiyaa.vanillarice.item.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.village.TradeOffer;
@@ -17,21 +17,21 @@ public class RiceTrades {
                 VillagerProfession.FARMER,
                 1,
                 factories -> {
-                    factories.add((entity, random) -> new TradeOffer(
+                    factories.add((world, entity, random) -> new TradeOffer(
                             new TradedItem(ModItems.RICE_GRAIN, 20),
                             new ItemStack(Items.EMERALD, 1),
                             16,
                             5,
                             0.05f
                     ));
-                    factories.add((entity, random) -> new TradeOffer(
+                    factories.add((world, entity, random) -> new TradeOffer(
                             new TradedItem(ModItems.RICE_BAG, 2),
                             new ItemStack(Items.EMERALD, 1),
                             16,
                             5,
                             0.05f
                     ));
-                    factories.add((entity, random) -> new TradeOffer(
+                    factories.add((world, entity, random) -> new TradeOffer(
                             new TradedItem(Items.EMERALD, 1),
                             new ItemStack(ModItems.RICE_BOWL, 4),
                             6,

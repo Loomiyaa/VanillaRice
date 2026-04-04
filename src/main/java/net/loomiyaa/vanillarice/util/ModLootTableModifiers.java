@@ -2,15 +2,19 @@ package net.loomiyaa.vanillarice.util;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.loomiyaa.vanillarice.item.ModItems;
-import net.minecraft.block.Blocks;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.condition.*;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+//import net.minecraft.loot.condition.*;
+//import net.minecraft.registry.*;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 
 public class ModLootTableModifiers
 {
@@ -21,42 +25,42 @@ public class ModLootTableModifiers
         LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) -> {
 
             // to retrieve the biomes, made necessary by 1.21
-            RegistryWrapper.Impl<Biome> impl = registries.getOrThrow(RegistryKeys.BIOME);
+            HolderLookup.RegistryLookup<Biome> impl = registries.lookupOrThrow(Registries.BIOME);
 
             // If the loot table is for the short / big grass block, and it is not overridden by a user:
             if (
                     source.isBuiltin() && (
-                            Blocks.SHORT_GRASS.getLootTableKey().get() == key ||
-                                    Blocks.TALL_GRASS.getLootTableKey().get() == key
+                            Blocks.SHORT_GRASS.getLootTable().get() == key ||
+                                    Blocks.TALL_GRASS.getLootTable().get() == key
                             )
 
             ) {
 
                 // Create a new loot pool that will hold the seeds.
-                LootPool.Builder pool = LootPool.builder()
+                LootPool.Builder pool = LootPool.lootPool()
 
                         // Add seeds...
-                        .with(ItemEntry.builder(ModItems.RICE_SEEDS))
+                        .add(LootItem.lootTableItem(ModItems.RICE_SEEDS))
 
                         // to the desired biomes
-                        .conditionally(LocationCheckLootCondition
-                                        .builder(
-                                                LocationPredicate.Builder.create().biome(
-                                                        RegistryEntryList.of(
-                                                                impl.getOrThrow(BiomeKeys.BAMBOO_JUNGLE),
-                                                                impl.getOrThrow(BiomeKeys.RIVER),
-                                                                impl.getOrThrow(BiomeKeys.MANGROVE_SWAMP),
-                                                                impl.getOrThrow(BiomeKeys.SWAMP)
+                        .when(LocationCheck
+                                        .checkLocation(
+                                                LocationPredicate.Builder.location().setBiomes(
+                                                        HolderSet.direct(
+                                                                impl.getOrThrow(Biomes.BAMBOO_JUNGLE),
+                                                                impl.getOrThrow(Biomes.RIVER),
+                                                                impl.getOrThrow(Biomes.MANGROVE_SWAMP),
+                                                                impl.getOrThrow(Biomes.SWAMP)
                                                         )
                                                 )
                                         )
                         )
                         // with our chance
-                        .conditionally(RandomChanceLootCondition.builder(RICE_SEEDS_DROP_CHANCE));
+                        .when(LootItemRandomChanceCondition.randomChance(RICE_SEEDS_DROP_CHANCE));
 
 
                 // Add the loot pool to the loot table
-                tableBuilder.pool(pool);
+                tableBuilder.withPool(pool);
             }
         });
     }

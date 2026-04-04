@@ -2,12 +2,14 @@ package net.loomiyaa.vanillarice.block;
 
 import net.loomiyaa.vanillarice.VanillaRice;
 import net.loomiyaa.vanillarice.block.custom.RiceCropBlock;
-import net.minecraft.block.*;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.function.Function;
 
 public final class ModBlocks
@@ -15,20 +17,20 @@ public final class ModBlocks
     public static final Block RICE_CROP = register(
             "rice_crop",
             RiceCropBlock::new,
-            Block.Settings.copy(Blocks.WHEAT)
-                    .nonOpaque()
+            BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)
+                    .noOcclusion()
                     .noCollision()
-                    .ticksRandomly()
-                    .breakInstantly()
-                    .sounds(BlockSoundGroup.CROP)
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
     );
 
-    private static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
-        final Identifier identifier = Identifier.of(VanillaRice.MOD_ID, path);
-        final RegistryKey<Block> registryKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
+    private static Block register(String path, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties settings) {
+        final Identifier identifier = Identifier.fromNamespaceAndPath(VanillaRice.MOD_ID, path);
+        final ResourceKey<Block> registryKey = ResourceKey.create(Registries.BLOCK, identifier);
 
         final Block block = Blocks.register(registryKey, factory, settings);
-        Items.register(block);
+        Items.registerBlock(block);
         return block;
     }
 

@@ -1,44 +1,48 @@
 package net.loomiyaa.vanillarice.block.custom;
 
 import net.loomiyaa.vanillarice.item.ModItems;
-import net.minecraft.block.*;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 
-public class RiceCropBlock extends CropBlock implements Waterloggable
+public class RiceCropBlock extends CropBlock implements SimpleWaterloggedBlock
 {
     public static final int MAX_AGE = 7;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public RiceCropBlock(Settings settings) {
+    public RiceCropBlock(Properties settings) {
         super(settings);
-        setDefaultState(getDefaultState()
-                .with(WATERLOGGED, false));
+        registerDefaultState(defaultBlockState()
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
-    protected ItemConvertible getSeedsItem()
+    protected ItemLike getBaseSeedId()
     {
         return ModItems.RICE_SEEDS;
     }
 
     // our block is through-walkable and so pathfinding at all times
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType type) {
+    protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return true;
     }
 
@@ -49,71 +53,71 @@ public class RiceCropBlock extends CropBlock implements Waterloggable
 
     // Make the block recognize the property, otherwise setting the property will throw exceptions.
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE, WATERLOGGED);    // all properties need to be added here, so age too!
     }
 
     // make plantable on dirt and mud
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return floor.isOf(Blocks.DIRT) || floor.isOf(Blocks.MUD);
+    protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
+        return floor.is(Blocks.DIRT) || floor.is(Blocks.MUD);
     }
 
     // make plantable only in water
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return world.getFluidState(pos).isOf(Fluids.WATER) &&
-                world.getBlockState(pos.up()).isOf(Blocks.AIR) &&
+    protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        return world.getFluidState(pos).is(Fluids.WATER) &&
+                world.getBlockState(pos.above()).is(Blocks.AIR) &&
                 (
-                        world.getBlockState(pos.down()).isOf(Blocks.DIRT) ||
-                                world.getBlockState(pos.down()).isOf(Blocks.MUD)
+                        world.getBlockState(pos.below()).is(Blocks.DIRT) ||
+                                world.getBlockState(pos.below()).is(Blocks.MUD)
                 );
     }
 
     // instantly water log the crop if placed in water
     @Override
-    public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState()
-                .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+    public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        return this.defaultBlockState()
+                .setValue(WATERLOGGED, ctx.getLevel().getFluidState(ctx.getClickedPos()).is(Fluids.WATER));
     }
 
     // display crop with water in it, when waterlogged
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     // handle water flow through the crops
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
-        if (state.get(WATERLOGGED)) {
-            tickView.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+    public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess tickView, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+        if (state.getValue(WATERLOGGED)) {
+            tickView.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+        return super.updateShape(state, world, tickView, pos, direction, neighborPos, neighborState, random);
     }
 
     // handle what happens if the crop grows (aka preserve water source block)
     @Override
-    public BlockState withAge(int age) {
-        return (BlockState)this.getDefaultState()
-                .with(this.getAgeProperty(), age)
-                .with(WATERLOGGED, WATERLOGGED.getValues().get(0)); //append current waterlogged state to state applied after growth
+    public BlockState getStateForAge(int age) {
+        return (BlockState)this.defaultBlockState()
+                .setValue(this.getAgeProperty(), age)
+                .setValue(WATERLOGGED, WATERLOGGED.getPossibleValues().get(0)); //append current waterlogged state to state applied after growth
     }
 
     // We override here only to lower light level (by 1) to 8 and also handle if moisture is 0.0f
     // Just a QOL thing for players I guess
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (getAvailableMoisture(this, world, pos) == 0.0f)
+    protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+        if (getGrowthSpeed(this, world, pos) == 0.0f)
             return;
 
-        if (world.getBaseLightLevel(pos, 0) >= 8) {
+        if (world.getRawBrightness(pos, 0) >= 8) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
-                float f = getAvailableMoisture(this, world, pos);
+                float f = getGrowthSpeed(this, world, pos);
                 if (random.nextInt((int)(25.0F / f) + 1) == 0) {
-                    world.setBlockState(pos, this.withAge(i + 1), 2);
+                    world.setBlock(pos, this.getStateForAge(i + 1), 2);
                 }
             }
         }
@@ -123,12 +127,12 @@ public class RiceCropBlock extends CropBlock implements Waterloggable
     // We grow at full speed (7.0) if all conditions are met, else we don't grow at all (0.0).
     // CARE: vanilla blocks never return 0.0f as it breaks randomTick(...). We handle it here, but if another
     // mod would get that property for some off reason, this might lead to a bug
-    protected static float getAvailableMoisture(Block block, BlockView world, BlockPos pos) {
+    protected static float getGrowthSpeed(Block block, BlockGetter world, BlockPos pos) {
         // conditions are: generally waterlogged, planted on dirt/mud, and also specifically waterlogged with water
         // -> is waterlogged a duplication of isIn(water)? I don't know, let's be safe
-        if (block.getStateWithProperties(world.getBlockState(pos)).get(WATERLOGGED, Boolean.FALSE)
-                && (world.getBlockState(pos.down()).isOf(Blocks.DIRT) || world.getBlockState(pos.down()).isOf(Blocks.MUD))
-                && world.getFluidState(pos).isIn(FluidTags.WATER)
+        if (block.withPropertiesOf(world.getBlockState(pos)).getValueOrElse(WATERLOGGED, Boolean.FALSE)
+                && (world.getBlockState(pos.below()).is(Blocks.DIRT) || world.getBlockState(pos.below()).is(Blocks.MUD))
+                && world.getFluidState(pos).is(FluidTags.WATER)
         )
                 return 7.0f;
         else

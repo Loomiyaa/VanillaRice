@@ -5,7 +5,6 @@ import net.loomiyaa.vanillarice.block.ModBlocks;
 import net.loomiyaa.vanillarice.item.ModItemGrouper;
 import net.loomiyaa.vanillarice.item.ModItems;
 import net.loomiyaa.vanillarice.util.ModLootTableModifiers;
-import net.loomiyaa.vanillarice.util.RiceTrades;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,6 @@ public class VanillaRice implements ModInitializer
 		ModItemGrouper.registerItemGroups();
 
 		ModLootTableModifiers.modifyLootTables();
-		RiceTrades.registerRiceTrades();
 
 		VanillaRice.LOGGER.debug(VanillaRice.MOD_ID + ": Initialization done!");
 	}
